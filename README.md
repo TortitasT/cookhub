@@ -12,6 +12,7 @@ import { CooklangRepository } from "cookhub";
 
 const repo = new CooklangRepository();
 
+// Awesome cookbook :D
 await repo.initialize("nicholaswilde", "recipes", "cook/breads");
 
 `{
