@@ -1,0 +1,25 @@
+{
+  "name": "cookhub",
+  "version": "1.0.0",
+  "description": "Parses cooklang recipes from GitHub repositories.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [
+    "cooklang",
+    "cooklang-ts",
+    "cooking",
+    "recipes",
+    "github",
+    "octokit"
+  ],
+  "author": "Victor Garcia",
+  "license": "MIT",
+  "dependencies": {
+    "@cooklang/cooklang-ts": "^1.2.4",
+    "octokit": "^2.1.0",
+    "vitest": "^0.32.2"
+  }
+}
