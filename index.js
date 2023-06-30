@@ -28,7 +28,7 @@ export class CooklangRepository {
 
       return new Recipe(fileContent)
     })
-    this.recipes = await Promise.all(this.recipes)
+    this.recipes = (await Promise.all(this.recipes)).filter((recipe) => recipe !== null)
   }
 
   async getRateLimit() {
