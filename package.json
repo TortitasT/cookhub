@@ -4,6 +4,10 @@
   "description": "Parses cooklang recipes from GitHub repositories.",
   "main": "index.js",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TortitasT/cookhub.git"
+  },
   "scripts": {
     "test": "vitest run"
   },
