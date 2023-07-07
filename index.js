@@ -1,5 +1,4 @@
 import { Octokit } from 'octokit'
-import https from 'https'
 import { Recipe } from '@cooklang/cooklang-ts'
 
 export class CooklangRepository {
@@ -24,7 +23,9 @@ export class CooklangRepository {
         return null
       }
 
-      const fileContent = await fetch(file.download_url)
+      console.log(file.download_url)
+
+      const fileContent = await request(file.download_url)
 
       return new Recipe(fileContent)
     })
@@ -48,18 +49,8 @@ export class CooklangRepository {
   }
 }
 
-async function fetch(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      let data = ''
-
-      res.on('data', (chunk) => {
-        data += chunk
-      })
-
-      res.on('end', () => {
-        resolve(data)
-      })
-    })
-  })
+async function request(url) {
+  const response = await fetch(url)
+  const data = await response.text()
+  return data
 }
