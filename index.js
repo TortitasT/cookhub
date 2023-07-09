@@ -1,18 +1,15 @@
-import { Octokit } from 'octokit'
 import { Recipe } from '@cooklang/cooklang-ts'
 
 export class CooklangRepository {
   constructor(auth = null) {
-    this.octokit = new Octokit({
-      auth
-    })
+    this.auth = auth
   }
 
   async initialize(owner, repo, recipesPath = '') {
     this.owner = owner
     this.repo = repo
 
-    this.files = (await this.getFiles(owner, repo, recipesPath)).data
+    this.files = (await this.getFiles(owner, repo, recipesPath))
 
     this.recipes = this.files.map(async (file) => {
       if (file.type !== 'file') {
@@ -23,8 +20,6 @@ export class CooklangRepository {
         return null
       }
 
-      console.log(file.download_url)
-
       const fileContent = await request(file.download_url)
 
       return new Recipe(fileContent)
@@ -33,24 +28,32 @@ export class CooklangRepository {
   }
 
   async getRateLimit() {
-    return (await this.octokit.request('GET /rate_limit', {
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    })).data
+    return githubApiRequest('https://api.github.com/rate_limit')
   }
 
-  async getFiles(owner, repo, path) {
-    return await this.octokit.rest.repos.getContent({
-      owner,
-      repo,
-      path,
-    })
+  async getFiles(owner, repo, path = '') {
+    return githubApiRequest(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, this.auth)
   }
 }
 
 async function request(url) {
   const response = await fetch(url)
   const data = await response.text()
+  return data
+}
+
+async function githubApiRequest(url, auth = null) {
+  const headers = {}
+  headers['Accept'] = 'application/vnd.github+json'
+  headers['X-GitHub-Api-Version'] = '2022-11-28'
+  if (auth !== null) {
+    headers['Authorization'] = `Bearer  ${auth}`
+  }
+
+  const response = await fetch(url, {
+    headers
+  })
+
+  const data = await response.json()
   return data
 }
